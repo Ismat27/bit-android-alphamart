@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="tvRightAddressMargin">115dp</dimen>
+    <dimen name="buttonCorners">8dp</dimen>
+    <dimen name="etHeight">60dp</dimen>
 </resources>
