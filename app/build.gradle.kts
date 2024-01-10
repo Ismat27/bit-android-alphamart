@@ -5,6 +5,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -68,6 +69,7 @@ dependencies {
 
     //Dagger hilt
     implementation("com.google.dagger:hilt-android:2.38.1")
+    implementation("com.google.firebase:firebase-auth:22.3.0")
     kapt("com.google.dagger:hilt-compiler:2.38.1")
 
     testImplementation("junit:junit:4.13.2")
