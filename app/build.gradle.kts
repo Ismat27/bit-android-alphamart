@@ -38,6 +38,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -47,9 +50,7 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-    val daggerVersion = "2.44"
-
-//    apply plugin: "kotlin-kapt"
+    val daggerVersion = "2.50"
 
     //loading button
     implementation("br.com.simplepass:loading-button-android:2.2.0")
@@ -72,10 +73,7 @@ dependencies {
     //Dagger hilt
     implementation("com.google.dagger:hilt-android:$daggerVersion")
     implementation("com.google.firebase:firebase-auth:22.3.0")
-    kapt("com.google.dagger:hilt-compiler:$daggerVersion")
-
-//    implementation("com.google.dagger:hilt-android:$daggerVersion")
-//    kapt("com.google.dagger:hilt-android-compiler:$daggerVersion")
+    kapt("com.google.dagger:hilt-android-compiler:$daggerVersion")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
