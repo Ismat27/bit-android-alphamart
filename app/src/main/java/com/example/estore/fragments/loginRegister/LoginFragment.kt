@@ -15,8 +15,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.estore.R
 import com.example.estore.activities.ShoppingActivity
 import com.example.estore.databinding.FragmentLoginBinding
+import com.example.estore.dialog.ResetPasswordBottomSheetDialog
 import com.example.estore.util.Resource
 import com.example.estore.viewmodel.LoginViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -46,6 +48,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             tvRegisterPrompt.setOnClickListener {
                 findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }
+
+            tvForgotPasswordLogin.setOnClickListener {
+                val resetDialog = ResetPasswordBottomSheetDialog { email ->
+                    startPasswordReset(email)
+                }
+                resetDialog.show(childFragmentManager, "ResetPasswordDialog")
+            }
+
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -70,6 +80,31 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
             }
         }
+
+        observePasswordResetFlow()
+    }
+
+    private fun observePasswordResetFlow() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.resetPassword.collect {
+                    if (it is Resource.Error) {
+                        Snackbar.make(
+                            requireView(),
+                            it.message ?: "Operation failed",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                    if (it is Resource.Success) {
+                        Snackbar.make(
+                            requireView(),
+                            it.data ?: "Check your email for steps to reset your password",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
     }
 
     private fun loginUser(email: String, password: String) {
@@ -87,4 +122,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
         return isEmailValid && password.length >= 6
     }
+
+    private fun startPasswordReset(email: String) {
+        val isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        if (isEmailValid) {
+            viewModel.passwordReset(email)
+        } else {
+            Toast.makeText(requireContext(), "Enter correct email", Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
 }

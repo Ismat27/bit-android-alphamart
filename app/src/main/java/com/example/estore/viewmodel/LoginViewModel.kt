@@ -21,6 +21,9 @@ class LoginViewModel @Inject constructor(
     private val _login = MutableSharedFlow<Resource<FirebaseUser>>()
     val login = _login.asSharedFlow()
 
+    private val _resetPassword = MutableSharedFlow<Resource<String>>()
+    val resetPassword = _resetPassword.asSharedFlow()
+
     fun loginWithEmailAndPassword(email: String, password: String) {
         viewModelScope.launch {
             _login.emit(Resource.Loading())
@@ -44,6 +47,35 @@ class LoginViewModel @Inject constructor(
             viewModelScope.launch {
                 _login.emit(Resource.Error("Unable to log in"))
                 Log.e(LOGIN_TAG, e.localizedMessage ?: "error log in")
+            }
+        }
+    }
+
+    fun passwordReset(email: String) {
+        viewModelScope.launch {
+            _resetPassword.emit(Resource.Loading())
+        }
+        try {
+            firebaseAuth.sendPasswordResetEmail(email)
+                .addOnSuccessListener {
+                    viewModelScope.launch {
+                        _resetPassword.emit(
+                            Resource.Success(
+                                "Password reset link " +
+                                        "has been sent to your email"
+                            )
+                        )
+                    }
+                }
+                .addOnFailureListener {
+                    viewModelScope.launch {
+                        _resetPassword.emit(Resource.Error("Incorrect credentials"))
+                    }
+                }
+        } catch (e: Exception) {
+            Log.e("PasswordReset", e.localizedMessage ?: "unable to process password reset")
+            viewModelScope.launch {
+                _resetPassword.emit(Resource.Error("unable to process password reset"))
             }
         }
     }
