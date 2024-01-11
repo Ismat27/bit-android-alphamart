@@ -19,4 +19,8 @@
     <string name="hint_last_name">Last Name</string>
     <string name="register_page_title">Let\'s Register</string>
     <string name="loading_request">Loading...</string>
+    <string name="reset_your_password">Reset your password</string>
+    <string name="reset_instruction">Enter your registered email to reset to password</string>
+    <string name="cancel">Cancel</string>
+    <string name="reset_password">Reset</string>
 </resources>
