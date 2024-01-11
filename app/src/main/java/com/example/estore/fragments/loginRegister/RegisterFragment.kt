@@ -1,10 +1,10 @@
 package com.example.estore.fragments.loginRegister
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.estore.R
 import com.example.estore.data.User
 import com.example.estore.databinding.FragmentRegisterBinding
-import com.example.estore.util.Constants.REGISTER_TAG
 import com.example.estore.util.Resource
 import com.example.estore.viewmodel.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,6 +44,12 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             etRegisterPassword.setText("")
         }
         viewModel.resetStatus()
+        Toast.makeText(
+            requireContext(),
+            "Sign up successful\nProceed to Login",
+            Toast.LENGTH_LONG
+        ).show()
+        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,13 +89,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 viewModel.register.collect {
                     when (it) {
                         is Resource.Error -> {
-                            Log.d(REGISTER_TAG, it.message ?: "Error registering")
+                            Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                         }
 
-                        is Resource.Loading -> {}
-
                         is Resource.Success -> {
-                            Log.d(REGISTER_TAG, it.data.toString())
                             completeRegister()
                         }
 
