@@ -2,9 +2,10 @@ package com.example.estore.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.estore.data.User
+import com.example.estore.util.Constants.USER_COLLECTION
 import com.example.estore.util.Resource
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,11 +14,14 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(private val firebaseAuth: FirebaseAuth) : ViewModel() {
+class RegisterViewModel @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    private val db: FirebaseFirestore
+) : ViewModel() {
 
-    private val _register = MutableStateFlow<Resource<FirebaseUser>>(Resource.Uninitialized())
+    private val _register = MutableStateFlow<Resource<User>>(Resource.Uninitialized())
 
-    val register: Flow<Resource<FirebaseUser>> = _register
+    val register: Flow<Resource<User>> = _register
     fun createAccountWithEmailAndPassword(user: User, password: String) {
         runBlocking {
             _register.emit(Resource.Loading())
@@ -25,11 +29,24 @@ class RegisterViewModel @Inject constructor(private val firebaseAuth: FirebaseAu
         firebaseAuth.createUserWithEmailAndPassword(user.email, password)
             .addOnSuccessListener { it ->
                 it.user?.let {
-                    _register.value = Resource.Success(it)
+                    saveUser(it.uid, user)
+                    _register.value = Resource.Success(user)
                 }
             }
             .addOnFailureListener {
                 _register.value = Resource.Error(it.message.toString())
+            }
+    }
+
+    private fun saveUser(uid: String, user: User) {
+        db.collection(USER_COLLECTION)
+            .document(uid)
+            .set(user)
+            .addOnSuccessListener {
+//                _register.value = Resource.Success(user)
+            }
+            .addOnFailureListener {
+//                _register.value = Resource.Error(it.message.toString())
             }
     }
 

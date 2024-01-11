@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -13,13 +14,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.estore.R
 import com.example.estore.data.User
 import com.example.estore.databinding.FragmentRegisterBinding
+import com.example.estore.util.Constants.REGISTER_TAG
 import com.example.estore.util.Resource
 import com.example.estore.viewmodel.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
-
-const val REGISTER_TAG = "RegisterTag"
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment(R.layout.fragment_register) {
@@ -59,7 +58,19 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     )
                 val password = etRegisterPassword.text.toString()
                 viewModel.createAccountWithEmailAndPassword(user, password)
+            }
 
+            etFirstName.doOnTextChanged { _, _, _, _ ->
+                validateInputFields()
+            }
+            etLastName.doOnTextChanged { _, _, _, _ ->
+                validateInputFields()
+            }
+            etRegisterEmail.doOnTextChanged { _, _, _, _ ->
+                validateInputFields()
+            }
+            etRegisterPassword.doOnTextChanged { _, _, _, _ ->
+                validateInputFields()
             }
         }
 
@@ -84,11 +95,29 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         binding.buttonRegister.text = getString(R.string.loading_request)
                         binding.buttonRegister.isEnabled = false
                     } else {
-                        binding.buttonRegister.isEnabled = true
+                        binding.buttonRegister.isEnabled = validateInputFields()
                         binding.buttonRegister.text = getString(R.string.register_app)
                     }
                 }
             }
         }
+    }
+
+    private fun validateInputFields(): Boolean {
+        val firstName = binding.etFirstName.text.toString()
+        val lastName = binding.etLastName.text.toString()
+        val email = binding.etRegisterEmail.text.toString()
+        val password = binding.etRegisterPassword.text.toString()
+
+        val isPasswordValid = password.isNotBlank()
+        val isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        val isFirstNameValid = firstName.isNotBlank()
+        val isLastNameValid = lastName.isNotBlank()
+
+        val isInputValid = isEmailValid && isPasswordValid && isFirstNameValid && isLastNameValid
+
+        binding.buttonRegister.isEnabled = isInputValid
+
+        return isInputValid
     }
 }
