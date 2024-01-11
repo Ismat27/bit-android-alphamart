@@ -117,43 +117,35 @@
             app:layout_constraintStart_toStartOf="@+id/loginLeftGuide"
             app:layout_constraintTop_toBottomOf="@+id/tvForgotPasswordLogin" />
 
-        <ImageView
-            android:id="@+id/facebookLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:contentDescription="@string/login_with_facebook"
-            android:src="@drawable/facebook_login"
-            app:layout_constraintStart_toStartOf="@id/loginLeftGuide"
-            app:layout_constraintTop_toBottomOf="@id/buttonLoginLogin" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/facebook"
-            app:layout_constraintBottom_toBottomOf="@id/facebookLogin"
-            app:layout_constraintEnd_toEndOf="@id/facebookLogin"
-            app:layout_constraintStart_toStartOf="@id/facebookLogin"
-            app:layout_constraintTop_toTopOf="@id/facebookLogin" />
-
-        <ImageView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/googleLogin"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:contentDescription="@string/login_with_facebook"
-            android:src="@drawable/google_login"
-           app:layout_constraintEnd_toEndOf="@id/loginRightGuide"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/background_google"
+            android:text="@string/google"
+            app:backgroundTint="@null"
+            app:icon="@drawable/google_icon"
+            app:iconGravity="textStart"
+            app:layout_constraintEnd_toStartOf="@+id/facebookLogin"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/loginLeftGuide"
             app:layout_constraintTop_toBottomOf="@id/buttonLoginLogin" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/facebookLogin"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/google"
-            app:layout_constraintBottom_toBottomOf="@id/googleLogin"
-            app:layout_constraintEnd_toEndOf="@id/googleLogin"
-            app:layout_constraintStart_toStartOf="@id/googleLogin"
-            app:layout_constraintTop_toTopOf="@id/googleLogin" />
+            android:background="@drawable/blue_background"
+            android:text="@string/facebook"
+            app:backgroundTint="@null"
+            app:icon="@drawable/facebook_icon"
+            app:iconGravity="textStart"
+            app:layout_constraintBaseline_toBaselineOf="@id/googleLogin"
+            app:layout_constraintEnd_toEndOf="@+id/loginRightGuide"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/googleLogin" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
