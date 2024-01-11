@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.estore.R
 import com.example.estore.data.User
 import com.example.estore.databinding.FragmentRegisterBinding
@@ -60,6 +61,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 viewModel.createAccountWithEmailAndPassword(user, password)
             }
 
+            tvLoginPrompt.setOnClickListener {
+                findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+            }
+
             etFirstName.doOnTextChanged { _, _, _, _ ->
                 validateInputFields()
             }
@@ -89,7 +94,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                             completeRegister()
                         }
 
-                        is Resource.Uninitialized -> {}
+                        else -> {}
                     }
                     if (it is Resource.Loading) {
                         binding.buttonRegister.text = getString(R.string.loading_request)

@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.estore.R
 import com.example.estore.activities.ShoppingActivity
 import com.example.estore.databinding.FragmentLoginBinding
@@ -41,6 +42,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 val email = etLoginEmail.text.toString()
                 val password = etLoginPassword.text.toString()
                 loginUser(email, password)
+            }
+            tvRegisterPrompt.setOnClickListener {
+                findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }
         }
 
