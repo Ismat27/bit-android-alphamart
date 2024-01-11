@@ -100,7 +100,7 @@
         app:layout_constraintTop_toBottomOf="@+id/guideLineLeftTexture" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/startButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/blue_background"
